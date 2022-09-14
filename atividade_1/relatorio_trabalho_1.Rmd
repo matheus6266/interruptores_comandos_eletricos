@@ -1,0 +1,178 @@
+---
+title: "Trabalho Prático 1 -  Diodos e Transistores Bipolares de Potência"
+author: "Matheus Barros Oliveira"
+date: '2022-09-14'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, fig.alig='center',out.width="100%",out.height="100%"}
+knitr::include_graphics("images/cabecalho.png")
+```
+# 1. Introdução:
+
+Nesse projeto os estudantes deverão utilizar seus conhecimentos sobre tecnologia dos semicondutores de potência, diodos de potência e transistores bipolares de junção na solução de problemas envolvendo a aplicação dos dispositivos como elementos de conversores estáticos.
+
+# 2. Objetivo:
+
+O objetivo deste trabalho é realizar cálculos e projetos em relação à semicondutores de potência diodos e transitores. 
+
+# 2.1 Problema 01:
+
+O diodo de potência MBR20100CT, do fabricante VISHAY, utilizado no circuito da Figura 1, tem uma tensão de threshold estimada (Vt) igual a $620mV$ e uma resistência em condução direta igual a $10.1m\Omega$. A tensão aplicada apresenta uma forma de onda triangular simétrica (Figura 2), com $120V$ picoa-pico e ciclo de trabalho $D = 0.5$, em uma frequência $fs = 20 kHz$. O circuito irá operar na temperatura ambiente de $30^{\circ}C$. 
+Fazer o projeto térmico para a aplicação, se necessário, considerando o uso de pasta térmica e sabendo que o diodo não precisa ser isolado eletricamente de um eventual dissipador.
+
+# Figura 1: Circuito Simplificado da Aplicação
+```{r echo=FALSE, fig.alig='center',out.width="100%",out.height="100%"}
+knitr::include_graphics("images/figura_1.jpg")
+```
+
+# Figura 2: Forma de Onda da Tensão Vi
+```{r echo=FALSE, fig.alig='center',out.width="100%",out.height="100%"}
+knitr::include_graphics("images/figura_2.jpg")
+```
+
+# 2.2 Problema 02:
+
+O conversor c.c.-c.c. mostrado na Figura 3 é utilizado para se elevar de $24V$ para $60V$ c.c. a tensão de um banco de baterias para aplicação em uma carga elétrica. Os interruptores eletrônicos empregados no conversor são o MOSFET M1 e o Diodo de potência D1. Para a aplicação em questão o projetista escolheu o diodo VS-E5TH1506, cuja folha de dados encontra-se em anexo. As formas de onda das correntes, em ampères, nos interruptores e nos componentes passivos do conversor estão representadas na Figura 4. Se o conversor opera na frequência de chaveamento $fs = 100KHz$, com ciclo de trabalho $D = 0.66$, pede-se determinar:
+
+a) os valores médio e rms da corrente diodo D1;
+b) as perdas em condução em D1;
+c) a temperatura de junção (Tj) do diodo D1 considerando uma temperatura ambiente de $40^{\circ}C$;
+d) discutir a necessidade de se utilizar um dissipador de calor com o componente D1.
+
+# Figura 3: Conversor Boost c.c - c.c
+```{r echo=FALSE, fig.alig='center',out.width="100%",out.height="100%"}
+knitr::include_graphics("images/figura_3.jpg")
+```
+
+# Figura 4: Formas de Onda das Correntes [A]
+```{r echo=FALSE, fig.alig='center',out.width="100%",out.height="100%"}
+knitr::include_graphics("images/figura_4.jpg")
+```
+
+# 2.3 Problema 3:
+
+Um circuito de acionamento com o transistor bipolar 2SCR582D3 deve alimentar uma carga resistiva de $10\Omega$ a partir de uma fonte de tensão contínua de $24V$. A carga deve receber uma tensão com forma de onda quadrada e frequência $fs = 1KHz$, com razão cíclica 0,8 (o sinal deve permanecer em nível alto durante 80% do seu período Ts). A tensão do circuito de comando de base do transistor tem amplitude de $5V$.
+
+Sabendo que a corrente média desejada na carga deve ser em torno de $1.92A$ e a perda por condução no transistor deve ser mínima. Pede-se projetar o resistor de base do acionamento (valor ôhmico e potência), considerando um fator de saturação $OF = 3$. 
+
+Comentar sobre a viabilidade de se construir um circuito semelhante ao desse problema, empregando um transistor bipolar de potência, se a fonte de tensão contínua for de $240V$ e a corrente média desejada na carga estiver em torno de $15A$.
+
+# 3 Materiais e Métodos:
+
+Prencher com os softwares que foram utilizados. T
+
+# 4. Desenvolvimento:
+
+# 4.1 Problema 1:
+
+Todos os cálculos desenvolvidos abaixo forma realizados considerando o diodo modelo: TO-220AB MBR20100CT do fabricante VISHAY.
+
+# 4.1.1 Cálculo Potência Condução:
+
+Como a fonte de alimentação apresenta uma forma de onda triangular, para o cálculo da corrente média $Imed$ foi utilizado a equação abaixo, onde:
+
+$K$ é a razão cíclica;
+$Ip$ é a corrente de pico;
+
+$$Imed = \frac{K}{2}Ip$$
+
+```{r}
+resistencia <- 3;
+tensao_pico <- 60;
+ciclo_trabalho <- 0.5;
+corrente_pico <- tensao_pico/resistencia;
+corrente_media <- (ciclo_trabalho/2)*corrente_pico;
+sprintf("A corrente média será: %.2f A", corrente_media);
+
+```
+Para o cálculo da corrente $Irms$ foi utilizada a seguinte fórmula onde:
+
+$Ip$ é a corrente de pico;
+$K$ é a razão cícilida;
+
+$$Irms = Ip\sqrt{\frac{K}{3}}$$
+```{r}
+corrente_rms <- corrente_pico*sqrt(ciclo_trabalho/3);
+sprintf("A corrente RMS será: %.2f A", corrente_rms);
+
+```
+
+Para o cálculo da potência consumida em condução foi utilizada a seguinte fórmula abaixo onde:
+
+$Vt$ é a queda de tensão direta no diodo;
+$Id$ é a corrente direta média no diodo;
+$Rd$ é a resistência de condução direta;
+$Idrms$ é a corrente direta rms no diodo;
+
+$$Pcond = VtId + RdIdrms^2$$
+```{r}
+
+tensao_conducao_diodo <- 620e-3;
+resistencia_direta_diodo <- 10.1e-3;
+potencia_conducao <- (tensao_conducao_diodo*corrente_media)+
+  (resistencia_direta_diodo*(corrente_rms^2));
+sprintf("A potência de condução direta do diodo será: %.2fW", potencia_conducao);
+
+```
+
+Para o cálculo da temperatura de operação da junção do diodo foi utilizada a seguinte fórmula, onde:
+
+$Tj$ temperatura de junção;
+$Pj$ potência de condução;
+$Rja$ resistência junção/ambiente;
+$Rca$ resistência case/ambiente;
+$Rja$ resistência junção/ambiente;
+$Ta$ temperatura ambiente;
+
+
+$$Tj = (Pj*Rja) + Ta$$
+
+```{r}
+temperatura_maxima_juncao <- 150;
+resistencia_ja <- 60;
+temperatura_ambiente <- 30;
+temperatura_juncao <- (potencia_conducao*resistencia_ja) + temperatura_ambiente;
+sprintf("Temperatura calculada: %.2f ºC, temperatura máxima: %.2f ºC. Desta forma
+        ve-se a necessidade de se usar um dissipador de calor.", temperatura_juncao,
+        temperatura_maxima_juncao);
+
+```
+
+Para o cálculo do dissipador de calor foram utilizadas as seguintes equações, onde:
+
+$Rja$ resistência junção/ambiente;
+$Rjc$ resistência junção/case;
+$Rcd$ resistência case/dissapador;
+$Rda$ resistência dissipador/ambiente;
+$Tj$ temperatura de junção, considerada 80% da temperatura de junção máxima;
+$Ta$ temperatura ambiente;
+$Pd$ potência consumida na condução;
+
+$$Rda = Rja - Rjc - Rcd$$
+$$Rja = \frac{(Tj - Ta)}{Pd}$$
+
+```{r}
+resistencia_jc <- 2;
+resistencia_cd <- 2; # Sem considerar a pasta térmica
+temperatura_juncao_projeto <- 0.8 * temperatura_maxima_juncao;
+resistencia_ja_projeto <- (temperatura_juncao_projeto - temperatura_ambiente)/potencia_conducao;
+resistencia_da <- resistencia_ja_projeto - resistencia_jc - resistencia_cd;
+resistencia_da_final <- 12; # Valor da reistência do dissipador do catálogo
+resistencia_ja_projeto_final <- resistencia_jc + resistencia_cd + resistencia_da_final
+sprintf("O valor de resistência máxima do dissipador do projeto deve ser: %.2f ohms.
+        Considerando o valor de resistência do dissapador de calor de %.2f ohms o valor
+        final da resistência Rja final será: %.2f ohms",resistencia_da,    resistencia_da_final, resistencia_ja_projeto_final);
+```
+```{r}
+temperatura_juncao_final <- (potencia_conducao * resistencia_ja_projeto_final) + temperatura_ambiente;
+sprintf("Após a instalação do dissipador de calor modelo: WA-T220-101E a temperatura da junção ficou em:
+        %.2f ºC", temperatura_juncao_final);
+
+```
+
+
