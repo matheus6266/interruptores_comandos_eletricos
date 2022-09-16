@@ -259,12 +259,13 @@ temperatura_juncao_final <- round(calculo_temperatura_juncao(potencia_conducao,r
 O valor máximo da resistência térmica do dissipador de calor que atende a temperatura de junção do projeto é `r resistencia_da`$^{\circ}C/W$ . Desta forma foi escolhido o dissipador de calor modelo WA-T220-101E da marca Ohmite, pois o mesmo atende às especificações do projetoe possui um valor de resistência térmica de 
 `r resistencia_da_final`$^{\circ}C/W$. Após a instalação do dissipador de calor no conjunto o valor final do $Rja$ será `r resistencia_ja_projeto_final`$^{\circ}C/W$. 
 
+Após a instalação do dissipador de calor a temperatura de junção final no diodo sera: `r temperatura_juncao_final`$^{\circ}C$.
 
 # 4.2: Problema 2:
 
 Para a realição da questão foi considerado o diodo modelo VS - E5TH1506 - M3 do fabricante VISHAY.
 
-# 4.2.1 Cálculo Corrente Média e Corrente RMS:
+# 4.2.1 Cálculo Corrente Média:
 
 Para o cálculo da corrente média foi utilizada a seguinte equação abaixo onde:
 
@@ -295,17 +296,31 @@ ciclo_trabalho_2 = 0.66;
 corrente_ia_2 = 6;
 corrente_ib_2 = 10;
 corrente_media_2 = (ciclo_trabalho_2 * (corrente_ia_2 + corrente_ib_2))/2;
-corrente_rms_2 = sqrt((ciclo_trabalho_2*(corrente_ib_2^2 + 
-                        corrente_ia_2*corrente_ib_2 + corrente_ia_2^2))/3);
 
 print(
   paste
   ("A corrente média no D1 será",round(corrente_media_2,2),"A e a corrente RMS no D1 será",round(corrente_rms_2,2),"A"));
 
 ```
-# 4.2.2 Cálculo da Potência Dissipada em Condução:
 
-Os valores da resistência de condução $Rd$ e tensão direta $Vt$ do diodo VS - E5TH1506 - M3 foram obtidas no arquivo em anexo "Informações Diodo VS - E5TH1506 - M3".
+A corrente média calculada foi: `r corrente_media_2`A.
+
+# 4.2.2 Cálculo Corrente RMS:
+
+```{r}
+
+corrente_rms_2 = 
+  sqrt(
+    (ciclo_trabalho_2*(corrente_ib_2^2 + 
+                        corrente_ia_2*corrente_ib_2 + corrente_ia_2^2))/3);
+
+```
+
+O valor da corrente $Irms$ calculada foi: `r corrente_rms_2`A.
+
+# 4.2.3 Cálculo da Potência Dissipada em Condução:
+
+Para o cálculo da potência dissipada em condução foram considerados os valores da resistência de condução $Rd$ e tensão direta $Vt$ do diodo VS - E5TH1506 - M3 obtidos no arquivo em anexo "Informações Diodo VS - E5TH1506 - M3".
  
 ```{r}
 
@@ -314,64 +329,60 @@ tensao_conducao_diodo_2 = 0.8437;
 potencia_conducao_2 <- calculo_potecia_conducao(tensao_conducao_diodo_2,
                                                 corrente_media_2,resistencia_direta_diodo_2,corrente_rms_2);
 
-print(
-  paste(
-    "A potência dissipada em condução do diodo será:",potencia_conducao_2,"W."));
-
-
 ```
 
-# 4.2.3 Cálculo da Temperatura de Junção:
+A potência de condução direta do diodo calculada foi: `r potencia_conducao_2`W.
+
+# 4.2.4 Cálculo da Temperatura de Junção:
 
 Não foi possível encontar o valor da resistência $RJa$ no data - sheet do componente VS-E5TH1506-M3, desta forma foi utilizado o diodo modelo VS - 15ETX06 - M3, que possui características semelhantes, para a determinação do valor de $Rja$ cujo valor encontrado foi de $70^{\circ}C/W$.
 
 ```{r}
+temperatura_maxima_juncao_2 <- 175;
 temperatura_ambiente_2 = 40;
 resistencia_jc_2 = 1.72;
 resistencia_ca_2 = 70;
 resistencia_ja_2 = resistencia_jc_2 + resistencia_ca_2;
 temperatura_juncao_2 <- 
-  calculo_temperatura_juncao(potencia_conducao_2,resistencia_ja_2,
-                             temperatura_ambiente_2);
-
-print(
-  paste(
-    "A temperatura de junção do diodo será:",
-    round(temperatura_juncao_2,2),"ºC."));
+  round(
+    calculo_temperatura_juncao(potencia_conducao_2,resistencia_ja_2,
+                             temperatura_ambiente_2),2);
 
 ```
-Analisando o valor da temperatura de junção calculada $462.79^{\circ}C$ e o valor da temperatura máxima de junção do diodo que é $175^{\circ}C$ ve-se a necessidade de instalação de um dissipador de calor no projeto.
 
-# 4.2.4 Cálculo do Dissipador de Calor:
+Analisando o valor da temperatura de junção calculada `r temperatura_juncao_2`$^{\circ}C$ e o valor da temperatura máxima de junção do diodo que é `r temperatura_maxima_juncao_2`$^{\circ}C$ ve-se a necessidade de instalação de um dissipador de calor no projeto.
+
+# 4.2.5 Cálculo do Dissipador de Calor:
 
 Para o cálculo do dissipador de calor foram utilizadas as mesmas equações do ítem 4.1.4 deste relatório. Foi considerado para o cálculo do dissipador de calor uma temperatura de junção máxima de 80% da temperatura máxima do diodo que é $175^{\circ}C$ e sem pasta térmica entre o case e o dissipador.
 
 ```{r}
 
 resistencia_cd_2 <- 2;
-temperatura_maxima_juncao_2 <- 175;
 temperatura_juncao_projeto_2 <- 0.8*temperatura_maxima_juncao_2;
-resistencia_ja_projeto_2 <- calculo_resistencia_ja(temperatura_juncao_projeto_2,temperatura_ambiente_2, potencia_conducao_2);
-resistencia_da_2 <- calculo_resistencia_da(resistencia_ja_projeto_2,
+
+resistencia_ja_projeto_2 <-   calculo_resistencia_ja(temperatura_juncao_projeto_2,
+                      temperatura_ambiente_2, potencia_conducao_2);
+
+resistencia_da_2 <- 
+  calculo_resistencia_da(resistencia_ja_projeto_2,
                                     resistencia_jc_2, resistencia_cd_2);
+
 resistencia_da_final_2 <- 12;
-resistencia_ja_projeto_final_2 <- (resistencia_jc_2 + resistencia_cd_2 + 
-  resistencia_da_final_2);
 
-print(
-  paste(
-    "O valor de resistência máxima do dissipador do projeto deve ser:",round(resistencia_da_2,2),"ohms.Considerando o valor de resistência do dissapador de calor de",round(resistencia_da_final_2,2),"ohms o valor final da resistência Rja final será:",round(resistencia_ja_projeto_final_2,2),"ohms"));
+resistencia_ja_projeto_final_2 <- 
+  (resistencia_jc_2 + resistencia_cd_2 + resistencia_da_final_2);
 
-```
-```{r}
 temperatura_juncao_final_2 <- 
   calculo_temperatura_juncao(potencia_conducao_2,
         resistencia_ja_projeto_final_2, temperatura_ambiente_2);
 
-print(paste("Após a instalação do dissipador de calor modelo: WA-T220-101E a 
-temperatura da junção ficou em:",round(temperatura_juncao_final_2,2),"ºC"));
-
 ```
+
+O valor máximo da resistência térmica do dissipador de calor que atende a temperatura de junção do projeto é `r resistencia_da_2`$^{\circ}C/W$ . Desta forma foi escolhido o dissipador de calor modelo WA-T220-101E da marca Ohmite, pois o mesmo atende às especificações do projetoe possui um valor de resistência térmica de`r resistencia_da_final_2`$^{\circ}C/W$. Após a instalação do dissipador de calor no conjunto o valor final do $Rja$ será `r resistencia_ja_projeto_final_2`$^{\circ}C/W$.
+
+Após a instalação do dissipador de calor a temperatura de junção final no diodo sera: `r temperatura_juncao_final_2`$^{\circ}C$.
+
 
 # 4.3 Problema 3:
 
