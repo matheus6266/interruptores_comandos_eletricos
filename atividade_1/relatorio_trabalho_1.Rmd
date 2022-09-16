@@ -22,7 +22,7 @@ O objetivo deste trabalho é realizar cálculos e projetos em relação à semic
 
 # 2.1 Problema 01:
 
-O diodo de potência MBR20100CT, do fabricante VISHAY, utilizado no circuito da Figura 1, tem uma tensão de threshold estimada (Vt) igual a $620mV$ e uma resistência em condução direta igual a $10.1m\Omega$. A tensão aplicada apresenta uma forma de onda triangular simétrica (Figura 2), com $120V$ picoa-pico e ciclo de trabalho $D = 0.5$, em uma frequência $fs = 20 kHz$. O circuito irá operar na temperatura ambiente de $30^{\circ}C$. 
+O diodo de potência MBR20100CT, do fabricante VISHAY, utilizado no circuito da Figura 1, tem uma tensão de threshold estimada (Vt) igual a $620mV$ e uma resistência em condução direta igual a $10.1m\Omega$. A tensão aplicada apresenta uma forma de onda triangular simétrica (Figura 2), com $120V$ pico a pico e ciclo de trabalho $D = 0.5$, em uma frequência $fs = 20 kHz$. O circuito irá operar na temperatura ambiente de $30^{\circ}C$. 
 Fazer o projeto térmico para a aplicação, se necessário, considerando o uso de pasta térmica e sabendo que o diodo não precisa ser isolado eletricamente de um eventual dissipador.
 
 # Figura 1: Circuito Simplificado da Aplicação
@@ -37,7 +37,7 @@ knitr::include_graphics("images/figura_2.jpg")
 
 # 2.2 Problema 02:
 
-O conversor c.c.-c.c. mostrado na Figura 3 é utilizado para se elevar de $24V$ para $60V$ c.c. a tensão de um banco de baterias para aplicação em uma carga elétrica. Os interruptores eletrônicos empregados no conversor são o MOSFET M1 e o Diodo de potência D1. Para a aplicação em questão o projetista escolheu o diodo VS-E5TH1506, cuja folha de dados encontra-se em anexo. As formas de onda das correntes, em ampères, nos interruptores e nos componentes passivos do conversor estão representadas na Figura 4. Se o conversor opera na frequência de chaveamento $fs = 100KHz$, com ciclo de trabalho $D = 0.66$, pede-se determinar:
+O conversor $c.c.- c.c$. mostrado na Figura 3 é utilizado para se elevar de $24V$ para $60V$ c.c. a tensão de um banco de baterias para aplicação em uma carga elétrica. Os interruptores eletrônicos empregados no conversor são o MOSFET M1 e o Diodo de potência D1. Para a aplicação em questão o projetista escolheu o diodo VS-E5TH1506, cuja folha de dados encontra-se em anexo. As formas de onda das correntes, em ampères, nos interruptores e nos componentes passivos do conversor estão representadas na Figura 4. Se o conversor opera na frequência de chaveamento $fs = 100KHz$, com ciclo de trabalho $D = 0.66$, pede-se determinar:
 
 a) os valores médio e rms da corrente diodo D1;
 b) as perdas em condução em D1;
@@ -56,7 +56,7 @@ knitr::include_graphics("images/figura_4.jpg")
 
 # 2.3 Problema 3:
 
-Um circuito de acionamento com o transistor bipolar 2SCR582D3 deve alimentar uma carga resistiva de $10\Omega$ a partir de uma fonte de tensão contínua de $24V$. A carga deve receber uma tensão com forma de onda quadrada e frequência $fs = 1KHz$, com razão cíclica 0,8 (o sinal deve permanecer em nível alto durante 80% do seu período Ts). A tensão do circuito de comando de base do transistor tem amplitude de $5V$.
+Um circuito de acionamento com o transistor bipolar 2SCR582D3 deve alimentar uma carga resistiva de $10\Omega$ a partir de uma fonte de tensão contínua de $24V$. A carga deve receber uma tensão com forma de onda quadrada e frequência $fs = 1KHz$, com razão cíclica 0,8 (o sinal deve permanecer em nível alto durante $80\%$ do seu período Ts). A tensão do circuito de comando de base do transistor tem amplitude de $5V$.
 
 Sabendo que a corrente média desejada na carga deve ser em torno de $1.92A$ e a perda por condução no transistor deve ser mínima. Pede-se projetar o resistor de base do acionamento (valor ôhmico e potência), considerando um fator de saturação $OF = 3$. 
 
@@ -72,7 +72,7 @@ Prencher com os softwares que foram utilizados. T
 
 Todos os cálculos desenvolvidos abaixo forma realizados considerando o diodo modelo: TO-220AB MBR20100CT do fabricante VISHAY.
 
-# 4.1.1 Cálculo da Corrente Média e Corrente RMS:
+# 4.1.1 Cálculo da Corrente Média:
 
 Como a fonte de alimentação apresenta uma forma de onda triangular, para o cálculo da corrente média $Imed$ foi utilizado a equação abaixo, onde:
 
@@ -82,14 +82,19 @@ $Ip$ é a corrente de pico;
 $$Imed = \frac{K}{2}Ip$$
 
 ```{r}
+
 resistencia <- 3;
 tensao_pico <- 60;
 ciclo_trabalho <- 0.5;
 corrente_pico <- tensao_pico/resistencia;
-corrente_media <- (ciclo_trabalho/2)*corrente_pico;
-sprintf("A corrente média será: %.2f A", corrente_media);
+corrente_media <- round((ciclo_trabalho/2)*corrente_pico,2);
 
 ```
+
+A corrente média calculada foi: `r corrente_media`A.
+
+# 4.1.2 Cálculo da Corrente RMS:
+
 Para o cálculo da corrente $Irms$ foi utilizada a seguinte fórmula onde:
 
 $Ip$ é a corrente de pico;
@@ -97,11 +102,15 @@ $K$ é a razão cícilida;
 
 $$Irms = Ip\sqrt{\frac{K}{3}}$$
 ```{r}
-corrente_rms <- corrente_pico*sqrt(ciclo_trabalho/3);
-sprintf("A corrente RMS será: %.2f A", corrente_rms);
+
+corrente_rms <- round(corrente_pico*sqrt(ciclo_trabalho/3),4);
 
 ```
-# 4.2.2 Cálculo Potência Condução:
+
+O valor da corrente $Irms$ calculada foi: `r corrente_rms`A.
+
+
+# 4.1.3 Cálculo Potência Condução:
 
 Para o cálculo da potência consumida em condução foi utilizada a seguinte fórmula abaixo onde:
 
@@ -112,32 +121,43 @@ $Idrms$ é a corrente direta rms no diodo;
 
 $$Pcond = VtId + RdIdrms^2$$
 Declarando a função para o cálculo da potência de condução.
+
 ```{r}
-calculo_potecia_conducao <- function(tensao_conducao, corrente_media, resistencia_direta, corrente_rms){
+calculo_potecia_conducao <- function(tensao_conducao, corrente_media, 
+                                     resistencia_direta, corrente_rms){
   potencia_conducao <- (tensao_conducao*corrente_media)+
   (resistencia_direta*(corrente_rms^2));
   
   return(potencia_conducao);
 }
+
 ```
 
 ```{r}
 
 tensao_conducao_diodo <- 620e-3;
 resistencia_direta_diodo <- 10.1e-3;
-potencia_conducao <- calculo_potecia_conducao(tensao_conducao_diodo,corrente_media,resistencia_direta_diodo,corrente_rms);
-sprintf("A potência de condução direta do diodo será: %.2fW", potencia_conducao);
+potencia_conducao <- round(calculo_potecia_conducao(tensao_conducao_diodo,
+                   corrente_media,resistencia_direta_diodo,corrente_rms),2);
 
 ```
-# 4.1.3 Cálculo da Temperatura de Junção:
+
+A potência de condução direta do diodo calculada foi: `r potencia_conducao`W.
+
+# 4.1.4 Cálculo da Temperatura de Junção:
 
 Para o cálculo da temperatura de operação da junção do diodo foi utilizada a seguinte fórmula, onde:
 
 $Tj$ temperatura de junção;
+
 $Pj$ potência de condução;
+
 $Rja$ resistência junção/ambiente;
+
 $Rca$ resistência case/ambiente;
+
 $Rja$ resistência junção/ambiente;
+
 $Ta$ temperatura ambiente;
 
 
@@ -145,9 +165,16 @@ $$Tj = (Pj*Rja) + Ta$$
 Declaração da função para o cálculo da temperatura de junção.
 
 ```{r}
-calculo_temperatura_juncao <- function(potencia_conducao, resistencia_ja, temperatura_ambiente){
-  temperatura_juncao <- (potencia_conducao*resistencia_ja) + temperatura_ambiente;
+calculo_temperatura_juncao <- 
+  
+  function(potencia_conducao, resistencia_ja, temperatura_ambiente){
+    
+  temperatura_juncao <- 
+    (potencia_conducao*resistencia_ja) +
+    temperatura_ambiente;
+  
   return(temperatura_juncao);
+  
 }
 ```
 
@@ -155,23 +182,29 @@ calculo_temperatura_juncao <- function(potencia_conducao, resistencia_ja, temper
 temperatura_maxima_juncao <- 150;
 resistencia_ja <- 60;
 temperatura_ambiente <- 30;
-temperatura_juncao <- calculo_temperatura_juncao(potencia_conducao, resistencia_ja, temperatura_ambiente);
-sprintf("Temperatura calculada: %.2f ºC, temperatura máxima: %.2f ºC. Desta forma
-        ve-se a necessidade de se usar um dissipador de calor.", temperatura_juncao,
-        temperatura_maxima_juncao);
+temperatura_juncao <- round(calculo_temperatura_juncao(potencia_conducao,
+                              resistencia_ja, temperatura_ambiente),2);
 
 ```
 
-# 4.1.4 Cálculo do Dissipador de Calor:
+A temperatura de junção calculada foi `r temperatura_juncao`$^{\circ}C$ e atemperatura de junção máxima do diodo é `temperatura_maxima_juncao`$^{\circ}C$. Desta forma ve-se a necessidade de se usar um dissipador de calor.
+
+# 4.1.5 Cálculo do Dissipador de Calor:
 
 Para o cálculo do dissipador de calor foram utilizadas as seguintes equações, onde:
 
 $Rja$ resistência junção/ambiente;
+
 $Rjc$ resistência junção/case;
+
 $Rcd$ resistência case/dissapador;
+
 $Rda$ resistência dissipador/ambiente;
+
 $Tj$ temperatura de junção, considerada 80% da temperatura de junção máxima;
+
 $Ta$ temperatura ambiente;
+
 $Pd$ potência consumida na condução;
 
 $$Rda = Rja - Rjc - Rcd$$
@@ -179,16 +212,20 @@ $$Rja = \frac{(Tj - Ta)}{Pd}$$
 Declaração da função para o cálculo do valor da resistência $Rja$.
 
 ```{r}
-calculo_resistencia_ja <- function(temperatura_juncao, temperatura_ambiente, potencia_conducao){
-  resistencia_ja <- (temperatura_juncao - temperatura_ambiente)/potencia_conducao;
+
+calculo_resistencia_ja <- function(temperatura_juncao, temperatura_ambiente,potencia_conducao){
+    
+  resistencia_ja<-(temperatura_juncao-temperatura_ambiente)/potencia_conducao;
   
   return(resistencia_ja);
+  
 }
 ```
 
 Declaração da função de cálculo da resistência do dissipador $Rda$.
 
 ```{r}
+
 calculo_resistencia_da <- function(resistencia_ja, resistencia_jc,
                                    resistencia_cd){
   resistencia_da <- resistencia_ja - resistencia_jc - resistencia_cd;
@@ -200,23 +237,28 @@ calculo_resistencia_da <- function(resistencia_ja, resistencia_jc,
 Para a determinação do valor da resistência térmica do dissipador não foi considerada a utilização de pasta térmica entre o case e o dissipador.
 
 ```{r}
+
 resistencia_jc <- 2;
 resistencia_cd <- 2; # Sem considerar a pasta térmica
 temperatura_juncao_projeto <- 0.8 * temperatura_maxima_juncao;
-resistencia_ja_projeto <- calculo_resistencia_ja(temperatura_juncao_projeto,temperatura_ambiente, potencia_conducao);
-resistencia_da <- calculo_resistencia_da(resistencia_ja_projeto, resistencia_jc, resistencia_cd);
+
+resistencia_ja_projeto <- calculo_resistencia_ja(temperatura_juncao_projeto,temperatura_ambiente,
+                                                 potencia_conducao);
+resistencia_da <- 
+  calculo_resistencia_da(resistencia_ja_projeto,resistencia_jc,resistencia_cd);
+
 resistencia_da_final <- 12; # Valor da reistência do dissipador do catálogo
-resistencia_ja_projeto_final <- resistencia_jc + resistencia_cd + resistencia_da_final
-sprintf("O valor de resistência máxima do dissipador do projeto deve ser: %.2f ohms.
-        Considerando o valor de resistência do dissapador de calor de %.2f ohms o valor
-        final da resistência Rja final será: %.2f ohms",resistencia_da,    resistencia_da_final, resistencia_ja_projeto_final);
-```
-```{r}
-temperatura_juncao_final <- calculo_temperatura_juncao(potencia_conducao,resistencia_ja_projeto_final,temperatura_ambiente);
-sprintf("Após a instalação do dissipador de calor modelo: WA-T220-101E a temperatura da junção ficou em:
-        %.2f ºC", temperatura_juncao_final);
+resistencia_ja_projeto_final <- round(resistencia_jc + resistencia_cd + 
+                                resistencia_da_final,2);
+
+temperatura_juncao_final <- round(calculo_temperatura_juncao(potencia_conducao,resistencia_ja_projeto_final,
+                                                       temperatura_ambiente),2);
 
 ```
+
+O valor máximo da resistência térmica do dissipador de calor que atende a temperatura de junção do projeto é `r resistencia_da`$^{\circ}C/W$ . Desta forma foi escolhido o dissipador de calor modelo WA-T220-101E da marca Ohmite, pois o mesmo atende às especificações do projetoe possui um valor de resistência térmica de 
+`r resistencia_da_final`$^{\circ}C/W$. Após a instalação do dissipador de calor no conjunto o valor final do $Rja$ será `r resistencia_ja_projeto_final`$^{\circ}C/W$. 
+
 
 # 4.2: Problema 2:
 
@@ -227,8 +269,11 @@ Para a realição da questão foi considerado o diodo modelo VS - E5TH1506 - M3 
 Para o cálculo da corrente média foi utilizada a seguinte equação abaixo onde:
 
 $Imed$ corrente média;
+
 $k$ razão cíclica;
+
 $Ia$ corrente base;
+
 $Ib$ corrente final;
 
 $$Imed = \frac{k(Ia + Ib)}{2}$$
@@ -236,30 +281,44 @@ $$Imed = \frac{k(Ia + Ib)}{2}$$
 Para o cálculo da corrente RMS foi utilizada a equação abaixo onde:
 
 $Irms$ corrente RMS;
+
 $k$ razão cíclica;
+
 $Ia$ corrente base;
+
 $Ib$ corrente final;
 
 $$Irms = \sqrt{\frac{k(Ib^2 + IaIb + Ia^2)}{3}}$$
 ```{r}
+
 ciclo_trabalho_2 = 0.66;
 corrente_ia_2 = 6;
 corrente_ib_2 = 10;
 corrente_media_2 = (ciclo_trabalho_2 * (corrente_ia_2 + corrente_ib_2))/2;
-corrente_rms_2 = sqrt((ciclo_trabalho_2*(corrente_ib_2^2 + corrente_ia_2*corrente_ib_2 + corrente_ia_2^2))/3);
-sprintf("A corrente média no D1 será %.2f A e a corrente RMS no D1 será
-        %.2f A", corrente_media_2, corrente_rms_2);
+corrente_rms_2 = sqrt((ciclo_trabalho_2*(corrente_ib_2^2 + 
+                        corrente_ia_2*corrente_ib_2 + corrente_ia_2^2))/3);
+
+print(
+  paste
+  ("A corrente média no D1 será",round(corrente_media_2,2),"A e a corrente RMS no D1 será",round(corrente_rms_2,2),"A"));
+
 ```
 # 4.2.2 Cálculo da Potência Dissipada em Condução:
 
 Os valores da resistência de condução $Rd$ e tensão direta $Vt$ do diodo VS - E5TH1506 - M3 foram obtidas no arquivo em anexo "Informações Diodo VS - E5TH1506 - M3".
  
 ```{r}
+
 resistencia_direta_diodo_2 = 0.0334;
 tensao_conducao_diodo_2 = 0.8437;
 potencia_conducao_2 <- calculo_potecia_conducao(tensao_conducao_diodo_2,
                                                 corrente_media_2,resistencia_direta_diodo_2,corrente_rms_2);
-sprintf("A potência dissipada em condução do diodo será: %.2f W", potencia_conducao_2);
+
+print(
+  paste(
+    "A potência dissipada em condução do diodo será:",potencia_conducao_2,"W."));
+
+
 ```
 
 # 4.2.3 Cálculo da Temperatura de Junção:
@@ -271,9 +330,15 @@ temperatura_ambiente_2 = 40;
 resistencia_jc_2 = 1.72;
 resistencia_ca_2 = 70;
 resistencia_ja_2 = resistencia_jc_2 + resistencia_ca_2;
-temperatura_juncao_2 <- calculo_temperatura_juncao(potencia_conducao_2,
-                                                   resistencia_ja_2, temperatura_ambiente_2);
-sprintf("A temperatura de junção do diodo será: %.2f ºC", temperatura_juncao_2);
+temperatura_juncao_2 <- 
+  calculo_temperatura_juncao(potencia_conducao_2,resistencia_ja_2,
+                             temperatura_ambiente_2);
+
+print(
+  paste(
+    "A temperatura de junção do diodo será:",
+    round(temperatura_juncao_2,2),"ºC."));
+
 ```
 Analisando o valor da temperatura de junção calculada $462.79^{\circ}C$ e o valor da temperatura máxima de junção do diodo que é $175^{\circ}C$ ve-se a necessidade de instalação de um dissipador de calor no projeto.
 
@@ -282,27 +347,34 @@ Analisando o valor da temperatura de junção calculada $462.79^{\circ}C$ e o va
 Para o cálculo do dissipador de calor foram utilizadas as mesmas equações do ítem 4.1.4 deste relatório. Foi considerado para o cálculo do dissipador de calor uma temperatura de junção máxima de 80% da temperatura máxima do diodo que é $175^{\circ}C$ e sem pasta térmica entre o case e o dissipador.
 
 ```{r}
+
 resistencia_cd_2 <- 2;
 temperatura_maxima_juncao_2 <- 175;
 temperatura_juncao_projeto_2 <- 0.8*temperatura_maxima_juncao_2;
 resistencia_ja_projeto_2 <- calculo_resistencia_ja(temperatura_juncao_projeto_2,temperatura_ambiente_2, potencia_conducao_2);
-resistencia_da_2 <- calculo_resistencia_da(resistencia_ja_projeto_2,resistencia_jc_2, resistencia_cd_2);
+resistencia_da_2 <- calculo_resistencia_da(resistencia_ja_projeto_2,
+                                    resistencia_jc_2, resistencia_cd_2);
 resistencia_da_final_2 <- 12;
 resistencia_ja_projeto_final_2 <- (resistencia_jc_2 + resistencia_cd_2 + 
   resistencia_da_final_2);
 
-sprintf("O valor de resistência máxima do dissipador do projeto deve ser: %.2f ohms.
-        Considerando o valor de resistência do dissapador de calor de %.2f ohms o valor
-        final da resistência Rja final será: %.2f ohms",resistencia_da_2,    resistencia_da_final_2, resistencia_ja_projeto_final_2);
+print(
+  paste(
+    "O valor de resistência máxima do dissipador do projeto deve ser:",round(resistencia_da_2,2),"ohms.Considerando o valor de resistência do dissapador de calor de",round(resistencia_da_final_2,2),"ohms o valor final da resistência Rja final será:",round(resistencia_ja_projeto_final_2,2),"ohms"));
+
 ```
 ```{r}
-temperatura_juncao_final_2 <- calculo_temperatura_juncao(potencia_conducao_2, resistencia_ja_projeto_final_2, temperatura_ambiente_2);
-sprintf("Após a instalação do dissipador de calor modelo: WA-T220-101E a temperatura da junção ficou em:
-        %.2f ºC", temperatura_juncao_final_2);
+temperatura_juncao_final_2 <- 
+  calculo_temperatura_juncao(potencia_conducao_2,
+        resistencia_ja_projeto_final_2, temperatura_ambiente_2);
+
+print(paste("Após a instalação do dissipador de calor modelo: WA-T220-101E a 
+temperatura da junção ficou em:",round(temperatura_juncao_final_2,2),"ºC"));
+
 ```
 
 # 4.3 Problema 3:
 
-
+`r resistencia_ja_2`
  
 
