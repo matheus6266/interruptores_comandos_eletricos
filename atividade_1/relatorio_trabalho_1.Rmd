@@ -23,7 +23,7 @@ O objetivo deste trabalho é realizar cálculos e projetos em relação à semic
 
 # 2.1 Problema 01:
 
-O diodo de potência MBR20100CT, do fabricante VISHAY, utilizado no circuito da Figura 1, tem uma tensão de threshold estimada (Vt) igual a $620mV$ e uma resistência em condução direta igual a $10.1m\Omega$. A tensão aplicada apresenta uma forma de onda triangular simétrica (Figura 2), com $120V$ pico a pico e ciclo de trabalho $D = 0.5$, em uma frequência $fs = 20 kHz$. O circuito irá operar na temperatura ambiente de $30^{\circ}C$. 
+O diodo de potência MBR20100CT, do fabricante VISHAY e sujo data sheet encontra-se em anexo, utilizado no circuito da Figura 1, tem uma tensão de threshold estimada (Vt) igual a $620mV$ e uma resistência em condução direta igual a $10.1m\Omega$. A tensão aplicada apresenta uma forma de onda triangular simétrica (Figura 2), com $120V$ pico a pico e ciclo de trabalho $D = 0.5$, em uma frequência $fs = 20 kHz$. O circuito irá operar na temperatura ambiente de $30^{\circ}C$. 
 Fazer o projeto térmico para a aplicação, se necessário, considerando o uso de pasta térmica e sabendo que o diodo não precisa ser isolado eletricamente de um eventual dissipador.
 
 # Figura 1: Circuito Simplificado da Aplicação
@@ -57,7 +57,7 @@ knitr::include_graphics("images/figura_4.jpg")
 
 # 2.3 Problema 3:
 
-Um circuito de acionamento com o transistor bipolar 2SCR582D3 deve alimentar uma carga resistiva de $10\Omega$ a partir de uma fonte de tensão contínua de $24V$. A carga deve receber uma tensão com forma de onda quadrada e frequência $fs = 1KHz$, com razão cíclica 0,8 (o sinal deve permanecer em nível alto durante $80\%$ do seu período Ts). A tensão do circuito de comando de base do transistor tem amplitude de $5V$.
+Um circuito de acionamento com o transistor bipolar 2SCR582D3, cujo data sheet encontra-se em anexo, deve alimentar uma carga resistiva de $10\Omega$ a partir de uma fonte de tensão contínua de $24V$. A carga deve receber uma tensão com forma de onda quadrada e frequência $fs = 1KHz$, com razão cíclica 0,8 (o sinal deve permanecer em nível alto durante $80\%$ do seu período Ts). A tensão do circuito de comando de base do transistor tem amplitude de $5V$.
 
 Sabendo que a corrente média desejada na carga deve ser em torno de $1.92A$ e a perda por condução no transistor deve ser mínima. Pede-se projetar o resistor de base do acionamento (valor ôhmico e potência), considerando um fator de saturação $OF = 3$. 
 
@@ -277,7 +277,7 @@ calculo_resistencia_da <-
 ```
 
 
-Para a determinação do valor da resistência térmica do dissipador não foi considerada a utilização de pasta térmica entre o case e o dissipador.
+Para a determinação do valor da resistência térmica do dissipador não foi considerada a utilização de pasta térmica entre o case e o dissipador e foi considerado um valor máximo da temperatura de junção do diodo em $80\%$ da temperatura máxima do diodo que é `r temperatura_maxima_juncao`$^{\circ}C$.
 
 
 ```{r}
@@ -336,6 +336,7 @@ O valor máximo da resistência térmica do dissipador de calor que atende a tem
 ```{r echo=FALSE, fig.alig='center',out.width="70%",out.height="70%"}
 knitr::include_graphics("images/tabela_2.jpg")
 ```
+
 Após a instalação do dissipador de calor no conjunto o valor final do $Rja$ será `r resistencia_ja_projeto_final`$^{\circ}C/W$ e a temperatura de junção final no diodo sera: `r temperatura_juncao_final`$^{\circ}C$.
 
 # 4.2: Problema 2:
@@ -344,7 +345,7 @@ Para a realição da questão foi considerado o diodo modelo VS - E5TH1506 - M3 
 
 # 4.2.1 Cálculo Corrente Média:
 
-Para o cálculo da corrente média foi utilizada a seguinte equação abaixo onde:
+Como tem-se uma onda trapezoidal de alimentação do circuito, para o cálculo da corrente média foi utilizada a seguinte equação abaixo onde:
 
 $Imed$ corrente média;
 
@@ -499,7 +500,7 @@ temperatura_juncao_final_2 <-
 
 ```
 
-O valor máximo da resistência térmica do dissipador de calor que atende a temperatura de junção do projeto é `r resistencia_da_2`$^{\circ}C/W$ . Desta forma foi escolhido o dissipador de calor modelo WA-T220-101E da marca Ohmite,que pode ser visto na Tabela 1, pois o mesmo atende às especificações do projetoe possui um valor de resistência térmica de`r resistencia_da_final_2`$^{\circ}C/W$. 
+O valor máximo da resistência térmica do dissipador de calor que atende a temperatura de junção do projeto é `r resistencia_da_2`$^{\circ}C/W$ . Desta forma foi escolhido o dissipador de calor modelo WA-T220-101E da marca Ohmite,que pode ser visto na Tabela 1, pois o mesmo atende às especificações do projeto e possui um valor de resistência térmica de `r resistencia_da_final_2`$^{\circ}C/W$. 
 
 Após a instalação do dissipador de calor no conjunto o valor final do $Rja$ será `r resistencia_ja_projeto_final_2`$^{\circ}C/W$.
 
@@ -538,7 +539,164 @@ temperatura_juncao_final_2 <-
 Com a utilização da pasta térmica conseguiu-se reduzir o valor da resistência $Rja$ para `r resistencia_ja_projeto_final_2`$^{\circ}C/W$ e consequentemente reduziou-se a temperatura de junção para `r temperatura_juncao_final_2`$^{\circ}C$.
 
 # 4.3 Problema 3:
+
+# 4.3.1: Parte 1:
+
+Para determinarmos o valor da resistência de base, primeiramente temos que determinar o valor de $Icsat$, situação onde temos a menor perda de condução, e para isso devemos utilizar a corrente média desejada para o cálculo. Para a determinação do $Icsat$ foi utilizada a seguinte equação, onde:
+
+# 4.3.1.1: Cálculo Corrente na Carga:
+
+$Imed$ corrente médida na carga;
+
+$D$ ciclo de trabalho;
+
+$Ip$ corrente de pico na carga
+
+$$Imed = D*Ip$$
+
+```{r}
+# Cálculo corrente de pico
+duty_cicle <- 0.8;
+corrente_media_3 <- 1.92;
+corrente_pico_3 <- round(corrente_media_3/duty_cicle,2);
+
+```
+
+Realizando o cálculo encontramos uma corrente de pico de `r corrente_pico_3`A para uma corrente média de `r corrente_media_3`A e um duty cicle de `r duty_cicle`. Com o valor desta corrente foi possível determinar o valor da corrente de saturação $Ibsat$, conforme pode ser visto na equação abaixo onde:
+
+# 4.3.1.2: Cálculo Ib sat:
+
+$Ibsat$ corrente de base de saturação;
+
+$Ics$ corrente de coletor de saturação;
+
+$\beta min$ ganho $\beta$ mínimo do transistor;
+
+$$I\beta sat = \frac{Ics}{\beta min}$$
+
+```{r}
+# Cálculo da corrente Ib saturação
+
+b_min <- 200;
+ib_sat <- round(corrente_pico_3/b_min, 4);
+
+```
+
+Para um ganho $\beta min$ de `r b_min` e uma corrente $Icsat$ de `r corrente_pico_3`A, teremos uma corrente $I\beta sat$ de `r ib_sat`A. Com a corrente $I\beta sat$ calculada pode-se calcular o valor de $Ib$ conforme pode-se ver abaixo:
+
+# 4.3.1.3: Cálculo Ib:
+
+$OF$ over-drive factor;
+
+$Ib$ corrente de base;
+
+$Ib sat$ corrente de base de saturação;
+
+$$OF = \frac{Ib}{Ibsat}$$
+
+```{r}
+# Cálculo da corrente ib
+
+over_drive <- 3;
+corrente_ib <- over_drive * ib_sat;
+
+```
+
+ Realizando o cálculo foi encontrado um valor de $Ib$ de `r corrente_ib`A. Com este valor de $Ib$ é possível determinar o valor de $Rb$ a partir da equação abaixo, considerando o valor da tensão de $5V$ e o valor de $VBE$ de $0.7V$, conforme pode-se ver abaixo, onde:
  
+# 4.3.1.4: Cálculo Rb
+ 
+ $Rb$ resistência de base;
+ 
+ $V$ tensão da fonte;
+ 
+ $VBE$ tensão base-emissor;
+ 
+ $Ib$ corrente de base;
+ 
+ $$Rb = \frac{V - VBE}{Ib}$$
+ 
+```{r}
+# Cálculo da resistência e potência consumida em Rb
+
+tensao_fonte <- 5;
+tensao_vbe <- 0.7;
+
+resistencia_rb <- round((tensao_fonte - tensao_vbe)/corrente_ib,2);
+potencia_rb <- round(resistencia_rb * corrente_ib,2);
+
+```
+ 
+ Para se manter uma corrente média de `r corrente_media_3`A com a menor perda possível em condução (transistor em saturação) deve-se usar uma resistência na base de `r resistencia_rb`$\Omega$, que provoca uma dissipação de potência de `r potencia_rb`W. Os cálculos realizados podem ser comprovados com a simulação realizada no software LtSpice e que pode ser vista na Figura 3.
+
+# Figura 3: Simulação no LTSpice
+```{r echo=FALSE, fig.alig='right',out.width="70%",out.height="70%"}
+knitr::include_graphics("images/grafico_corrente.jpg")
+```
+
+# 4.3.2: Parte 2
+
+Para a construção de um circutio similar utilizando um tansistor bioplar de potência, com uma fonte de $240V$ alimentando uma carga com uma corrente média de $15A$ não podemos utilizar o transistor modelo 2SCR582D3, pois a sua tensão de bloqueio $VCE$ máxima é $30V$ o que é insuficiente para bloquear a tensão da fonte que é $240V$. 
+
+Temos no mercado o transistor BJ modelo BUV22, cujo data sheet pode ser visto em anexo, que atenderia à aplicação, pois possui um tensão $VCEmax = 250V$ e uma corrente máxima de $Ic = 40A$. Para a realização dos cálculos abaixo foram utilizadas as fórmulas já definidas no ítem 4.3.1.
+
+# 4.3.2.1: Cálculo Corrente na Carga:
+
+```{r}
+# Cálculo corrente de pico
+
+duty_cicle <- 0.8;
+corrente_media_3_1 <- 15;
+corrente_pico_3_1 <- round(corrente_media_3_1/duty_cicle,2);
+
+```
+
+Realizando o cálculo encontramos uma corrente de pico de `r corrente_pico_3_1`A para uma corrente média de `r corrente_media_3_1`A e um duty cicle de `r duty_cicle`. Com o valor desta corrente foi possível determinar o valor da corrente de saturação $Ibsat$, conforme pode ser visto na equação abaixo onde:
+
+# 4.3.2.2: Cálculo Ib sat:
+
+```{r}
+# Cálculo Ib saturação
+
+b_min_1 <- 10;
+ib_sat_1 <- round(corrente_pico_3_1/b_min_1, 2);
+
+```
+
+Para um ganho $\beta min$ de `r b_min_1` e uma corrente $Icsat$ de `r corrente_pico_3_1`A, teremos uma corrente $I\beta sat$ de `r ib_sat_1`A. Com a corrente $I\beta sat$ calculada pode-se calcular o valor de $Ib$ conforme pode-se ver abaixo:
+
+# 4.3.2.3: Cálculo Ib:
+
+```{r}
+# Cálculo corrente Ib
+
+over_drive <- 3;
+corrente_ib_3 <- over_drive * ib_sat_1;
+
+```
+
+Realizando o cálculo foi encontrado um valor de $Ib$ de `r corrente_ib_3`A. Com este valor de $Ib$ é possível determinar o valor de $Rb$ apartir da equação abaixo, considerando o valor da tensão de $5V$ e o valor de $VBE$ de $0.7V$, conforme pode-se ver abaixo, onde:
+
+# 4.3.2.4: Cálculo Rb
+
+```{r}
+# Cálculo resistência e potência dissipada em Rb
+
+tensao_fonte <- 5;
+tensao_vbe <- 0.7;
+
+resistencia_rb_1 <- round((tensao_fonte - tensao_vbe)/corrente_ib_3,2);
+potencia_rb_1 <- round(resistencia_rb_1*corrente_ib_3,2);
+```
+
+Para se manter uma corrente média de `r corrente_media_3_1`A com a menor perda possível em condução (transistor em saturação) deve-se usar uma resistência na base de `r resistencia_rb_1`$\Omega$ que provoca um consumo de potência de `r potencia_rb_1`W. Os cálculos realizados podem ser comprovados com a simulação realizada no software LtSpice e que pode ser vista na Figura 4.
+
+# Figura 4: Simulação no LTSpice
+```{r echo=FALSE, fig.alig='center',out.width="70%",out.height="70%"}
+knitr::include_graphics("images/grafico_corrente_1.jpg")
+```
+
+
 # 5. Conclusão:
 
 # 5.1 Conclusão Questões 1 e 2:
@@ -546,6 +704,26 @@ Com a utilização da pasta térmica conseguiu-se reduzir o valor da resistênci
 Analisando os resultados obtidos pode-se concluir que os diodos de potência, assim como outros dispositivos eletrônicos, apresentam um certo aquecimento durante a sua operação e esse aquecimento esta diretamente relacionado com a razão direta de sua tensão de treshold $Vt$,a resistência interna $Rd$ do diodo e a corrente $Id$ que percorre o dispositivo. Para amenizar este efeito uma das soluções mais utilizadas é a instalação de um dissipador de potência para diminuir a resistência térmica do conjunto, pois aumenta a área de superfície do diodo e consequemente favorece a troca de calor com o ambiente.
 
 Nas duas situações estudas as temperaturas de junção dos diodos durante a operação estavam em `r temperatura_juncao`$^\circ{}C$ e `r temperatura_juncao_2`$^\circ{}C$ respectivamente. Após a instalção dos dissipadores de calor as temperaturas caíram para `r temperatura_juncao_final`$^\circ{}C$ e `r temperatura_juncao_final_2`$^\circ{}C$ respectivamente, ou seja, após a instação dos dissipadores tivemos uma redução de aproximadamente $65\%$ no primeiro caso e $72\%$ no segundo caso. 
+
+Pode-se concluir que a instalação de dispositivos que deminuem a resistência térmica de um dispositivo com o ambiente é impressindível para o bom funcionamento de equipamento eletrônicos, principalmente os que operam com grandes correntes.
+
+# 5.2 Conclusão Questão 3:
+
+Ao analisarmos a primeira parte da questão 3 temos um circuito de acionamento de uma carga pequena de corrente média de `r corrente_media_3`A alimentada por uma fonte de $24V$. Para chaveramos esta carga, devemos levar o transistor, modelo 2SCR582D3, para a regisão de saturação e para isso deve-se instalar no circuito de acionamento um resistor de `r resistencia_rb`$\Omega$, o que gera na base do transistor uma corrente de `r corrente_ib`A para um fator de saturação de 3, ou seja, para levarmos este transistor para a regisão de saturação obedecendo um fator de saturação de 3, teremos uma corrente de base de `r corrente_ib`A. Após os cálculos, o circuito foi simulado com os valor encontrados e obteve-se o resultado esperado de uma corrente média na carga de `r corrente_media_3`A, e este fator pode ser observado na Figura 3 onde temos o gráfico da corrente média $Ib$ na carga.
+
+Já na segunda parte do problema temos um circuito cuja corrente média é `r corrente_media_3_1`A e uma tensão de alimentação de $240V$. Para este circuito operar com esta tensão, teve-se que escolher outro modelo de transistor, pois a tensão de bloqueio $VCE$ do transistor modelo 2SCR582D3 é somente de $30V$ e sua corrente $Ic$ é de $10A$. Desta forma foi escolhido o transistor modelo BUV22 que possui uma tensão de bloqueio $VCE$ de $250V$ e uma corrente $Ic$ de $40A$. Ao se projetar o resistor de base para que este transistor opere na faixa de saturação com um fator de saturação de 3, foi encontrado um valor de resistecia de `r resistencia_rb_1`$\Omega$ para uma corrente de base `r corrente_ib_3`A. Após os cálculos o circuito foi simulado, e obteve-se o resultado esperado de uma corrente média na carga de `r corrente_media_3_1`A, este fator pode ser observado na Figura 4. Apesar de ter-se atingido o objetivo, pode-se observar que o circuito de comando possui uma corrente muito alta, pois o ganho $\beta$ do transistor para altas correntes cai muito, o que faz com que tenhamos uma corrente alta de $Ib$ para levar este transistor para a regisão de saturação. Desta forma este circuito torna-se inviável, pois a corrente de base do transistor é muito alta, o que provocaria um circuito de comando muito grande.
+
+Por fim, pode-se concluir que os transistores bipolares de junção (TBJ) são ótimos dispositivos para chaveamento de cargas, mas para garantir um bom funcionamento do circuito, deve-se ficar atendo às tensões de $VCEsat$, e correntes $ICsat$, $Ibsat$ e $Ib$, pois para determinadas tensões e correntes, o circuito de acionamento pode-se tornar muito grande, inviabilizando desta forma o projeto.
+
+[Clique aqui para acessar o Projeto no GitHub:](https://github.com/matheus6266/interruptores_comandos_eletricos/tree/main/atividade_1)
+
+# 6 Bibliografia:
+
+ROCHA, Anderson.**Interruptores e Comandos Eletrônicos: Diodo de Potência**,2022. 37 slides. Acesso em: 10/09/2022
+
+ROCHA, Anderson.**Interruptores e Comandos Eletrônicos: Modelos e Perdas de Dispositivos Semicondutores de Potência**,2022. 24 slides. Acesso em: 10/09/2022
+
+ROCHA, Anderson.**Interruptores e Comandos Eletrônicos: Módulo II**,2022. 19 slides. Acesso em: 10/09/2022
 
 
 
